@@ -487,6 +487,36 @@
             color: #fff;
         }
 
+        .pub-expand {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .pub-expand button {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #94a3b8;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pub-expand button:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .pub-item.hidden {
+            display: none;
+        }
+
+        .pub-list.expanded .pub-item.hidden {
+            display: block;
+        }
+
         /* Toast notification */
         .toast {
             position: fixed;
@@ -1019,8 +1049,9 @@
                 return;
             }
 
-            listContainer.innerHTML = papers.map(paper => `
-                <div class="pub-item">
+            const INITIAL_SHOW = 5;
+            listContainer.innerHTML = papers.map((paper, index) => `
+                <div class="pub-item${index >= INITIAL_SHOW ? ' hidden' : ''}">
                     <a href="${paper.url || `https://www.semanticscholar.org/search?q=${encodeURIComponent(paper.title)}`}" target="_blank" rel="noopener noreferrer">
                         <div class="pub-title">${escapeHtml(paper.title)}</div>
                         <div class="pub-meta">
@@ -1030,6 +1061,14 @@
                     </a>
                 </div>
             `).join('');
+
+            // Add expand button if there are more papers
+            if (papers.length > INITIAL_SHOW) {
+                const expandDiv = document.createElement('div');
+                expandDiv.className = 'pub-expand';
+                expandDiv.innerHTML = `<button onclick="togglePubs(this)">Show ${papers.length - INITIAL_SHOW} more</button>`;
+                listContainer.after(expandDiv);
+            }
         }
 
         function renderPublicationsError() {
@@ -1048,6 +1087,13 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        function togglePubs(btn) {
+            const list = document.getElementById('pub-list');
+            const isExpanded = list.classList.toggle('expanded');
+            const hiddenCount = list.querySelectorAll('.pub-item.hidden').length;
+            btn.textContent = isExpanded ? 'Show less' : `Show ${hiddenCount} more`;
         }
 
         // Load publications on page load

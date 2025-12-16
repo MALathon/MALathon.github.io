@@ -924,7 +924,6 @@
             // Fetch from all author profiles and merge
             try {
                 const allPapers = [];
-                let totalCitations = 0;
                 const paperIds = new Set(); // For deduplication
 
                 for (const authorId of AUTHOR_IDS) {
@@ -935,7 +934,6 @@
 
                         if (response.ok) {
                             const authorData = await response.json();
-                            totalCitations += authorData.citationCount || 0;
 
                             // Add papers, deduplicating by paperId
                             for (const paper of (authorData.papers || [])) {
@@ -949,6 +947,9 @@
                         console.warn(`Failed to fetch author ${authorId}:`, e);
                     }
                 }
+
+                // Sum citations from all unique papers
+                const totalCitations = allPapers.reduce((sum, p) => sum + (p.citationCount || 0), 0);
 
                 // Calculate h-index from merged papers
                 const citationCounts = allPapers

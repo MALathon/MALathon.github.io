@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Lifson - AI Research & Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Helvetica, Arial, sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, #1a1f4e 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, #2d1b69 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, #1e3a5f 0%, transparent 50%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bg-animation::before {
+                animation: none;
+            }
+        }
+
+        /* Grid overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .section-icon.presentations {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .section-icon.webapps {
+            background: linear-gradient(135deg, rgba(74, 226, 192, 0.2) 0%, rgba(33, 150, 243, 0.2) 100%);
+            border: 1px solid rgba(74, 226, 192, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* Cards grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.8s ease;
+            animation-fill-mode: both;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .card.presentation::before {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .card.webapp::before {
+            background: linear-gradient(90deg, #4AE2C0, #2196F3);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            padding: 25px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .card-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .card.presentation .card-badge {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.15);
+        }
+
+        .card.webapp .card-badge {
+            color: #4AE2C0;
+            background: rgba(74, 226, 192, 0.15);
+        }
+
+        .card-arrow {
+            width: 20px;
+            height: 20px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            color: #94a3b8;
+        }
+
+        .card:hover .card-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.3;
+            color: #fff;
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(100, 116, 139, 0.15);
+            border: 1px solid rgba(100, 116, 139, 0.25);
+            border-radius: 15px;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.15s; }
+        .card:nth-child(3) { animation-delay: 0.2s; }
+        .card:nth-child(4) { animation-delay: 0.25s; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 60px;
+        }
+
+        .footer-text {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .footer-link {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #764ba2;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* Glow effect */
+        .glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        /* Focus styles for accessibility */
+        .card-link:focus-visible,
+        .footer-link:focus-visible {
+            outline: 3px solid #667eea;
+            outline-offset: 3px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .card,
+            .header {
+                animation: none;
+            }
+            .card:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+    <div class="glow" id="glow"></div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Mark Lifson</h1>
+            <p class="subtitle">AI Research Oversight Tools & Presentations</p>
+        </header>
+
+        <!-- Presentations Section -->
+        <section class="section" id="presentations">
+            <div class="section-header">
+                <div class="section-icon presentations">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #667eea;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="section-title">Presentations</h2>
+                    <p class="section-subtitle">Interactive slide decks on AI research oversight</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card presentation">
+                    <a href="/presentations/NCI2025-AI-Oversight_Framework/dist/" class="card-link">
+                        <div class="card-header">
+                            <span class="card-badge">NCI 2025</span>
+                            <svg class="card-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">AI Research Oversight: Building an Effective Framework</h3>
+                        <p class="card-description">
+                            Comprehensive framework for IRB review of AI research protocols, addressing ethics, safety, and regulatory compliance.
+                        </p>
+                        <div class="card-tags">
+                            <span class="tag">AI Ethics</span>
+                            <span class="tag">IRB</span>
+                            <span class="tag">Healthcare</span>
+                            <span class="tag">Interactive</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="card presentation">
+                    <a href="/presentations/CoreTrainingWorkshop/dist/" class="card-link">
+                        <div class="card-header">
+                            <span class="card-badge">Core Training 2025</span>
+                            <svg class="card-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Core Training Workshop: AI Research Essentials</h3>
+                        <p class="card-description">
+                            Condensed workshop covering clinical phases, IRB criteria, risk assessment, and the oversight framework.
+                        </p>
+                        <div class="card-tags">
+                            <span class="tag">Workshop</span>
+                            <span class="tag">AI Ethics</span>
+                            <span class="tag">IRB</span>
+                            <span class="tag">Interactive</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Web Apps Section -->
+        <section class="section" id="webapps">
+            <div class="section-header">
+                <div class="section-icon webapps">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #4AE2C0;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="section-title">Web Applications</h2>
+                    <p class="section-subtitle">Interactive tools for AI research oversight</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card webapp">
+                    <a href="/ai-oversight-tools/" class="card-link">
+                        <div class="card-header">
+                            <span class="card-badge">SvelteKit 5</span>
+                            <svg class="card-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">AI Oversight Tools Suite</h3>
+                        <p class="card-description">
+                            Complete toolkit with Risk Matrix, Reviewer Checklist, Innovator Self-Assessment, and Traceability Editor.
+                        </p>
+                        <div class="card-tags">
+                            <span class="tag">Risk Matrix</span>
+                            <span class="tag">Checklists</span>
+                            <span class="tag">Graph Editor</span>
+                            <span class="tag">600+ Controls</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="card webapp">
+                    <a href="/presentations/irb-rules-engine/dist/" class="card-link">
+                        <div class="card-header">
+                            <span class="card-badge">React + Cytoscape</span>
+                            <svg class="card-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">IRB Rules Engine</h3>
+                        <p class="card-description">
+                            Visual rule builder for protocol assessment with graph visualization and risk-based controls.
+                        </p>
+                        <div class="card-tags">
+                            <span class="tag">Rule Builder</span>
+                            <span class="tag">Graph Viz</span>
+                            <span class="tag">IndexedDB</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p class="footer-text">
+                Built with modern web technologies •
+                <a href="https://github.com/MALathon" class="footer-link">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Mouse glow effect
+        const glow = document.getElementById('glow');
+        let mouseX = 0;
+        let mouseY = 0;
+        let currentX = 0;
+        let currentY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animate() {
+            currentX += (mouseX - currentX) * 0.1;
+            currentY += (mouseY - currentY) * 0.1;
+
+            glow.style.left = currentX + 'px';
+            glow.style.top = currentY + 'px';
+
+            requestAnimationFrame(animate);
+        }
+
+        // Respect reduced motion preference
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            animate();
+        }
+
+        // Hide glow when mouse leaves window
+        document.addEventListener('mouseout', (e) => {
+            if (!e.relatedTarget) {
+                glow.style.opacity = '0';
+            }
+        });
+
+        document.addEventListener('mouseover', () => {
+            glow.style.opacity = '1';
+        });
+    </script>
+</body>
+</html>

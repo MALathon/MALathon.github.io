@@ -135,6 +135,11 @@
             border: 1px solid rgba(74, 226, 192, 0.3);
         }
 
+        .section-icon.publications {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
         .section-title {
             font-size: 1.5rem;
             font-weight: 600;
@@ -438,9 +443,117 @@
             z-index: 0;
         }
 
+        /* Publications */
+        .pub-stats {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .pub-stat {
+            text-align: center;
+        }
+
+        .pub-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fbbf24;
+            line-height: 1;
+        }
+
+        .pub-stat-label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .pub-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .pub-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .pub-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        .pub-item a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .pub-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .pub-title:hover {
+            color: #fbbf24;
+        }
+
+        .pub-meta {
+            font-size: 0.85rem;
+            color: #64748b;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .pub-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pub-citations {
+            color: #fbbf24;
+        }
+
+        .pub-loading, .pub-error {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+
+        .pub-error {
+            color: #f87171;
+        }
+
+        .pub-more {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pub-more a {
+            color: #fbbf24;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .pub-more a:hover {
+            color: #fcd34d;
+        }
+
         /* Focus styles for accessibility */
         .btn:focus-visible,
-        .footer-link:focus-visible {
+        .footer-link:focus-visible,
+        .pub-item a:focus-visible {
             outline: 3px solid #667eea;
             outline-offset: 3px;
         }
@@ -623,6 +736,35 @@
             </div>
         </section>
 
+        <!-- Publications Section -->
+        <section class="section" id="publications">
+            <div class="section-header">
+                <div class="section-icon publications">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #fbbf24;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="section-title">Publications</h2>
+                    <p class="section-subtitle">Peer-reviewed research in AI, medical imaging, and healthcare informatics</p>
+                </div>
+            </div>
+
+            <div id="pub-stats" class="pub-stats">
+                <!-- Stats populated by JavaScript -->
+            </div>
+
+            <div id="pub-list" class="pub-list">
+                <div class="pub-loading">Loading publications...</div>
+            </div>
+
+            <div class="pub-more">
+                <a href="https://www.semanticscholar.org/author/Mark-Lifson/46692780" target="_blank" rel="noopener noreferrer">
+                    View all publications on Semantic Scholar →
+                </a>
+            </div>
+        </section>
+
         <footer class="footer">
             <p class="footer-text">
                 Built with modern web technologies •
@@ -697,6 +839,124 @@
                 toast.classList.remove('show');
             }, 2500);
         }
+
+        // Publications - Semantic Scholar API
+        const AUTHOR_ID = '46692780';
+        const CACHE_KEY = 'publications_cache';
+        const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+        async function fetchPublications() {
+            // Check cache first
+            const cached = localStorage.getItem(CACHE_KEY);
+            if (cached) {
+                const { data, timestamp } = JSON.parse(cached);
+                const age = Date.now() - timestamp;
+                if (age < CACHE_DURATION) {
+                    console.log('Using cached publications data');
+                    renderPublications(data);
+                    return;
+                }
+            }
+
+            // Fetch fresh data
+            try {
+                const response = await fetch(
+                    `https://api.semanticscholar.org/graph/v1/author/${AUTHOR_ID}?fields=name,paperCount,citationCount,hIndex,papers.title,papers.year,papers.citationCount,papers.venue,papers.url,papers.publicationDate`
+                );
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Cache the result
+                localStorage.setItem(CACHE_KEY, JSON.stringify({
+                    data: data,
+                    timestamp: Date.now()
+                }));
+
+                renderPublications(data);
+            } catch (error) {
+                console.error('Failed to fetch publications:', error);
+                renderPublicationsError();
+            }
+        }
+
+        function renderPublications(data) {
+            // Render stats
+            const statsContainer = document.getElementById('pub-stats');
+            statsContainer.innerHTML = `
+                <div class="pub-stat">
+                    <div class="pub-stat-value">${data.paperCount || 0}</div>
+                    <div class="pub-stat-label">Publications</div>
+                </div>
+                <div class="pub-stat">
+                    <div class="pub-stat-value">${(data.citationCount || 0).toLocaleString()}</div>
+                    <div class="pub-stat-label">Citations</div>
+                </div>
+                <div class="pub-stat">
+                    <div class="pub-stat-value">${data.hIndex || 0}</div>
+                    <div class="pub-stat-label">h-index</div>
+                </div>
+            `;
+
+            // Sort papers by year (most recent first) and citation count
+            const papers = (data.papers || [])
+                .filter(p => p.title && p.year)
+                .sort((a, b) => {
+                    if (b.year !== a.year) return b.year - a.year;
+                    return (b.citationCount || 0) - (a.citationCount || 0);
+                })
+                .slice(0, 8); // Show top 8 recent papers
+
+            // Render papers
+            const listContainer = document.getElementById('pub-list');
+
+            if (papers.length === 0) {
+                listContainer.innerHTML = '<div class="pub-loading">No publications found</div>';
+                return;
+            }
+
+            listContainer.innerHTML = papers.map(paper => `
+                <div class="pub-item">
+                    <a href="${paper.url || `https://www.semanticscholar.org/search?q=${encodeURIComponent(paper.title)}`}" target="_blank" rel="noopener noreferrer">
+                        <div class="pub-title">${escapeHtml(paper.title)}</div>
+                        <div class="pub-meta">
+                            <span>📅 ${paper.year}</span>
+                            ${paper.venue ? `<span>📖 ${escapeHtml(truncate(paper.venue, 50))}</span>` : ''}
+                            <span class="pub-citations">📊 ${paper.citationCount || 0} citations</span>
+                        </div>
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function renderPublicationsError() {
+            document.getElementById('pub-stats').innerHTML = '';
+            document.getElementById('pub-list').innerHTML = `
+                <div class="pub-error">
+                    Unable to load publications. <br>
+                    <a href="https://www.semanticscholar.org/author/Mark-Lifson/46692780" target="_blank" rel="noopener noreferrer" style="color: #fbbf24;">
+                        View directly on Semantic Scholar
+                    </a>
+                </div>
+            `;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function truncate(str, maxLength) {
+            if (!str) return '';
+            return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
+        }
+
+        // Load publications on page load
+        fetchPublications();
     </script>
 </body>
 </html>

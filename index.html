@@ -71,7 +71,7 @@
 
         /* Main container */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 60px 20px;
             position: relative;
@@ -81,7 +81,7 @@
         /* Header */
         .header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
             animation: fadeInDown 0.8s ease;
         }
 
@@ -103,16 +103,30 @@
             letter-spacing: 0.5px;
         }
 
+        /* Two-column layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+        }
+
         /* Section */
         .section {
-            margin-bottom: 60px;
+            margin-bottom: 0;
         }
 
         .section-header {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .section-icon {
@@ -135,11 +149,6 @@
             border: 1px solid rgba(74, 226, 192, 0.3);
         }
 
-        .section-icon.publications {
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-        }
-
         .section-title {
             font-size: 1.5rem;
             font-weight: 600;
@@ -148,7 +157,7 @@
 
         .section-subtitle {
             font-size: 0.9rem;
-            color: #64748b;
+            color: #94a3b8;
             margin-top: 4px;
         }
 
@@ -161,14 +170,13 @@
 
         /* Card */
         .card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #151a3d;
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 16px;
             overflow: hidden;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             animation: fadeInUp 0.8s ease;
             animation-fill-mode: both;
-            backdrop-filter: blur(10px);
             position: relative;
         }
 
@@ -198,7 +206,7 @@
 
         .card:hover {
             transform: translateY(-4px);
-            background: rgba(255, 255, 255, 0.08);
+            background: #1a2048;
             border-color: rgba(255, 255, 255, 0.2);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
@@ -225,12 +233,12 @@
 
         .card.presentation .card-badge {
             color: #667eea;
-            background: rgba(102, 126, 234, 0.15);
+            background: rgba(102, 126, 234, 0.2);
         }
 
         .card.webapp .card-badge {
             color: #4AE2C0;
-            background: rgba(74, 226, 192, 0.15);
+            background: rgba(74, 226, 192, 0.2);
         }
 
         .card-title {
@@ -243,7 +251,7 @@
 
         .card-description {
             font-size: 0.95rem;
-            color: #94a3b8;
+            color: #b8c5d6;
             line-height: 1.6;
             margin-bottom: 15px;
         }
@@ -258,11 +266,11 @@
         .tag {
             display: inline-block;
             padding: 3px 10px;
-            background: rgba(100, 116, 139, 0.15);
-            border: 1px solid rgba(100, 116, 139, 0.25);
+            background: rgba(100, 116, 139, 0.2);
+            border: 1px solid rgba(100, 116, 139, 0.3);
             border-radius: 15px;
             font-size: 0.7rem;
-            color: #94a3b8;
+            color: #b8c5d6;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -314,19 +322,169 @@
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #94a3b8;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #b8c5d6;
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
             color: #fff;
         }
 
         .btn-icon {
             padding: 10px;
+        }
+
+        /* Publications Sidebar */
+        .publications-sidebar {
+            background: #12162e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 28px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .pub-header {
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pub-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .pub-header p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .pub-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pub-stat {
+            text-align: center;
+        }
+
+        .pub-stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .pub-stat-label {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 6px;
+        }
+
+        .pub-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .pub-item {
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            transition: background 0.2s ease;
+        }
+
+        .pub-item:last-child {
+            border-bottom: none;
+        }
+
+        .pub-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            margin: 0 -12px;
+            padding: 14px 12px;
+            border-radius: 8px;
+        }
+
+        .pub-item a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .pub-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #e2e8f0;
+            line-height: 1.4;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .pub-item:hover .pub-title {
+            color: #fff;
+        }
+
+        .pub-meta {
+            font-size: 0.8rem;
+            color: #64748b;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pub-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pub-citations {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .pub-loading, .pub-error {
+            text-align: center;
+            padding: 30px 0;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .pub-error {
+            color: #f87171;
+        }
+
+        .pub-more {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pub-more a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .pub-more a:hover {
+            color: #fff;
         }
 
         /* Toast notification */
@@ -335,7 +493,7 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
-            background: rgba(74, 226, 192, 0.95);
+            background: #4AE2C0;
             color: #001833;
             padding: 12px 24px;
             border-radius: 8px;
@@ -411,6 +569,21 @@
         }
 
         /* Responsive */
+        @media (max-width: 1100px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .publications-sidebar {
+                position: static;
+                max-width: 100%;
+            }
+
+            .pub-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 40px 20px;
@@ -441,113 +614,6 @@
             transform: translate(-50%, -50%);
             transition: opacity 0.3s ease;
             z-index: 0;
-        }
-
-        /* Publications */
-        .pub-stats {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .pub-stat {
-            text-align: center;
-        }
-
-        .pub-stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #fbbf24;
-            line-height: 1;
-        }
-
-        .pub-stat-label {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 4px;
-        }
-
-        .pub-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .pub-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 20px;
-            transition: all 0.2s ease;
-        }
-
-        .pub-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(251, 191, 36, 0.3);
-        }
-
-        .pub-item a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .pub-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #fff;
-            line-height: 1.4;
-            margin-bottom: 8px;
-        }
-
-        .pub-title:hover {
-            color: #fbbf24;
-        }
-
-        .pub-meta {
-            font-size: 0.85rem;
-            color: #64748b;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .pub-meta span {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .pub-citations {
-            color: #fbbf24;
-        }
-
-        .pub-loading, .pub-error {
-            text-align: center;
-            padding: 40px;
-            color: #64748b;
-        }
-
-        .pub-error {
-            color: #f87171;
-        }
-
-        .pub-more {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .pub-more a {
-            color: #fbbf24;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        .pub-more a:hover {
-            color: #fcd34d;
         }
 
         /* Focus styles for accessibility */
@@ -588,186 +654,182 @@
     <div class="container">
         <header class="header">
             <h1 class="title">Mark Lifson, PhD</h1>
-            <p class="subtitle">AI/ML Systems Engineering • Medical Devices • Research Ethics</p>
+            <p class="subtitle">AI/ML Systems Engineering | Medical Devices | Research Ethics</p>
         </header>
 
-        <!-- Presentations Section -->
-        <section class="section" id="presentations">
-            <div class="section-header">
-                <div class="section-icon presentations">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #667eea;">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="section-title">Presentations</h2>
-                    <p class="section-subtitle">Interactive slide decks on AI research oversight</p>
-                </div>
-            </div>
-
-            <div class="cards-grid">
-                <!-- NCI 2025 Presentation -->
-                <div class="card presentation">
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-badge">NCI 2025</span>
+        <div class="main-layout">
+            <div class="main-content">
+                <!-- Presentations Section -->
+                <section class="section" id="presentations">
+                    <div class="section-header">
+                        <div class="section-icon presentations">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #667eea;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                            </svg>
                         </div>
-                        <h3 class="card-title">AI Research Oversight: Building an Effective Framework</h3>
-                        <p class="card-description">
-                            Comprehensive framework for IRB review of AI research protocols, addressing ethics, safety, and regulatory compliance.
-                        </p>
-                        <div class="card-tags">
-                            <span class="tag">AI Ethics</span>
-                            <span class="tag">IRB</span>
-                            <span class="tag">Healthcare</span>
-                            <span class="tag">Interactive</span>
-                        </div>
-                        <div class="card-actions">
-                            <a href="/presentations/NCI2025-AI-Oversight_Framework/dist/" class="btn btn-primary">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                View Live
-                            </a>
-                            <a href="/presentations/NCI2025-AI-Oversight_Framework/AI Research Oversight_ Building an Effective Framework.pdf" class="btn btn-secondary" download>
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
-                                </svg>
-                                PDF
-                            </a>
-                            <button class="btn btn-secondary btn-icon" onclick="copyLink('/presentations/NCI2025-AI-Oversight_Framework/dist/')" title="Copy link">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
-                                </svg>
-                            </button>
+                        <div>
+                            <h2 class="section-title">Presentations</h2>
+                            <p class="section-subtitle">Interactive slide decks on AI research oversight</p>
                         </div>
                     </div>
-                </div>
 
-                <!-- Core Training Workshop -->
-                <div class="card presentation">
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-badge">Core Training 2025</span>
+                    <div class="cards-grid">
+                        <!-- NCI 2025 Presentation -->
+                        <div class="card presentation">
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-badge">NCI 2025</span>
+                                </div>
+                                <h3 class="card-title">AI Research Oversight: Building an Effective Framework</h3>
+                                <p class="card-description">
+                                    Comprehensive framework for IRB review of AI research protocols, addressing ethics, safety, and regulatory compliance.
+                                </p>
+                                <div class="card-tags">
+                                    <span class="tag">AI Ethics</span>
+                                    <span class="tag">IRB</span>
+                                    <span class="tag">Healthcare</span>
+                                    <span class="tag">Interactive</span>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="/presentations/NCI2025-AI-Oversight_Framework/dist/" class="btn btn-primary">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        View Live
+                                    </a>
+                                    <a href="/presentations/NCI2025-AI-Oversight_Framework/AI Research Oversight_ Building an Effective Framework.pdf" class="btn btn-secondary" download>
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                        </svg>
+                                        PDF
+                                    </a>
+                                    <button class="btn btn-secondary btn-icon" onclick="copyLink('/presentations/NCI2025-AI-Oversight_Framework/dist/')" title="Copy link">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <h3 class="card-title">Core Training Workshop: AI Research Essentials</h3>
-                        <p class="card-description">
-                            Condensed workshop covering clinical phases, IRB criteria, risk assessment, and the oversight framework.
-                        </p>
-                        <div class="card-tags">
-                            <span class="tag">Workshop</span>
-                            <span class="tag">AI Ethics</span>
-                            <span class="tag">IRB</span>
-                            <span class="tag">Interactive</span>
-                        </div>
-                        <div class="card-actions">
-                            <a href="/presentations/CoreTrainingWorkshop/dist/" class="btn btn-primary">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                View Live
-                            </a>
-                            <a href="/presentations/CoreTrainingWorkshop/Core-Training-Workshop-AI.pdf" class="btn btn-secondary" download>
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
-                                </svg>
-                                PDF
-                            </a>
-                            <button class="btn btn-secondary btn-icon" onclick="copyLink('/presentations/CoreTrainingWorkshop/dist/')" title="Copy link">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Web Apps Section -->
-        <section class="section" id="webapps">
-            <div class="section-header">
-                <div class="section-icon webapps">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #4AE2C0;">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="section-title">Web Applications</h2>
-                    <p class="section-subtitle">Interactive tools for AI research oversight</p>
-                </div>
-            </div>
-
-            <div class="cards-grid">
-                <!-- AI Oversight Tools Suite -->
-                <div class="card webapp">
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-badge">SvelteKit 5</span>
-                        </div>
-                        <h3 class="card-title">AI Oversight Tools Suite</h3>
-                        <p class="card-description">
-                            Complete toolkit with Risk Matrix, Reviewer Checklist, Innovator Self-Assessment, and Traceability Editor.
-                        </p>
-                        <div class="card-tags">
-                            <span class="tag">Risk Matrix</span>
-                            <span class="tag">Checklists</span>
-                            <span class="tag">Graph Editor</span>
-                            <span class="tag">600+ Controls</span>
-                        </div>
-                        <div class="card-actions">
-                            <a href="/ai-oversight-tools/" class="btn btn-primary webapp-btn">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                                </svg>
-                                Open App
-                            </a>
-                            <button class="btn btn-secondary btn-icon" onclick="copyLink('/ai-oversight-tools/')" title="Copy link">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
-                                </svg>
-                            </button>
+                        <!-- Core Training Workshop -->
+                        <div class="card presentation">
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-badge">Core Training 2025</span>
+                                </div>
+                                <h3 class="card-title">Core Training Workshop: AI Research Essentials</h3>
+                                <p class="card-description">
+                                    Condensed workshop covering clinical phases, IRB criteria, risk assessment, and the oversight framework.
+                                </p>
+                                <div class="card-tags">
+                                    <span class="tag">Workshop</span>
+                                    <span class="tag">AI Ethics</span>
+                                    <span class="tag">IRB</span>
+                                    <span class="tag">Interactive</span>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="/presentations/CoreTrainingWorkshop/dist/" class="btn btn-primary">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        View Live
+                                    </a>
+                                    <a href="/presentations/CoreTrainingWorkshop/Core-Training-Workshop-AI.pdf" class="btn btn-secondary" download>
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                        </svg>
+                                        PDF
+                                    </a>
+                                    <button class="btn btn-secondary btn-icon" onclick="copyLink('/presentations/CoreTrainingWorkshop/dist/')" title="Copy link">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </section>
+
+                <!-- Web Apps Section -->
+                <section class="section" id="webapps">
+                    <div class="section-header">
+                        <div class="section-icon webapps">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #4AE2C0;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="section-title">Web Applications</h2>
+                            <p class="section-subtitle">Interactive tools for AI research oversight</p>
+                        </div>
+                    </div>
+
+                    <div class="cards-grid">
+                        <!-- AI Oversight Tools Suite -->
+                        <div class="card webapp">
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <span class="card-badge">SvelteKit 5</span>
+                                </div>
+                                <h3 class="card-title">AI Oversight Tools Suite</h3>
+                                <p class="card-description">
+                                    Complete toolkit with Risk Matrix, Reviewer Checklist, Innovator Self-Assessment, and Traceability Editor.
+                                </p>
+                                <div class="card-tags">
+                                    <span class="tag">Risk Matrix</span>
+                                    <span class="tag">Checklists</span>
+                                    <span class="tag">Graph Editor</span>
+                                    <span class="tag">600+ Controls</span>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="/ai-oversight-tools/" class="btn btn-primary webapp-btn">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                        Open App
+                                    </a>
+                                    <button class="btn btn-secondary btn-icon" onclick="copyLink('/ai-oversight-tools/')" title="Copy link">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Publications Sidebar -->
+            <aside class="publications-sidebar">
+                <div class="pub-header">
+                    <h2>Publications</h2>
+                    <p>Peer-reviewed research</p>
                 </div>
 
-            </div>
-        </section>
-
-        <!-- Publications Section -->
-        <section class="section" id="publications">
-            <div class="section-header">
-                <div class="section-icon publications">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #fbbf24;">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                    </svg>
+                <div id="pub-stats" class="pub-stats">
+                    <!-- Stats populated by JavaScript -->
                 </div>
-                <div>
-                    <h2 class="section-title">Publications</h2>
-                    <p class="section-subtitle">Peer-reviewed research in AI, medical imaging, and healthcare informatics</p>
+
+                <div id="pub-list" class="pub-list">
+                    <div class="pub-loading">Loading publications...</div>
                 </div>
-            </div>
 
-            <div id="pub-stats" class="pub-stats">
-                <!-- Stats populated by JavaScript -->
-            </div>
-
-            <div id="pub-list" class="pub-list">
-                <div class="pub-loading">Loading publications...</div>
-            </div>
-
-            <div class="pub-more">
-                <a href="https://www.semanticscholar.org/author/Mark-Lifson/46692780" target="_blank" rel="noopener noreferrer">
-                    View all publications on Semantic Scholar →
-                </a>
-            </div>
-        </section>
+                <div class="pub-more">
+                    <a href="https://www.semanticscholar.org/author/Mark-Lifson/46692780" target="_blank" rel="noopener noreferrer">
+                        View all on Semantic Scholar
+                    </a>
+                </div>
+            </aside>
+        </div>
 
         <footer class="footer">
             <p class="footer-text">
-                Built with modern web technologies •
+                Built with modern web technologies |
                 <a href="https://github.com/MALathon" class="footer-link">GitHub</a>
             </p>
         </footer>
@@ -889,7 +951,7 @@
             statsContainer.innerHTML = `
                 <div class="pub-stat">
                     <div class="pub-stat-value">${data.paperCount || 0}</div>
-                    <div class="pub-stat-label">Publications</div>
+                    <div class="pub-stat-label">Papers</div>
                 </div>
                 <div class="pub-stat">
                     <div class="pub-stat-value">${(data.citationCount || 0).toLocaleString()}</div>
@@ -908,7 +970,7 @@
                     if (b.year !== a.year) return b.year - a.year;
                     return (b.citationCount || 0) - (a.citationCount || 0);
                 })
-                .slice(0, 8); // Show top 8 recent papers
+                .slice(0, 6); // Show top 6 recent papers in sidebar
 
             // Render papers
             const listContainer = document.getElementById('pub-list');
@@ -923,9 +985,8 @@
                     <a href="${paper.url || `https://www.semanticscholar.org/search?q=${encodeURIComponent(paper.title)}`}" target="_blank" rel="noopener noreferrer">
                         <div class="pub-title">${escapeHtml(paper.title)}</div>
                         <div class="pub-meta">
-                            <span>📅 ${paper.year}</span>
-                            ${paper.venue ? `<span>📖 ${escapeHtml(truncate(paper.venue, 50))}</span>` : ''}
-                            <span class="pub-citations">📊 ${paper.citationCount || 0} citations</span>
+                            <span>${paper.year}</span>
+                            <span class="pub-citations">${paper.citationCount || 0} citations</span>
                         </div>
                     </a>
                 </div>
@@ -936,9 +997,9 @@
             document.getElementById('pub-stats').innerHTML = '';
             document.getElementById('pub-list').innerHTML = `
                 <div class="pub-error">
-                    Unable to load publications. <br>
-                    <a href="https://www.semanticscholar.org/author/Mark-Lifson/46692780" target="_blank" rel="noopener noreferrer" style="color: #fbbf24;">
-                        View directly on Semantic Scholar
+                    Unable to load publications.<br>
+                    <a href="https://www.semanticscholar.org/author/Mark-Lifson/46692780" target="_blank" rel="noopener noreferrer" style="color: #94a3b8;">
+                        View on Semantic Scholar
                     </a>
                 </div>
             `;
@@ -948,11 +1009,6 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
-        }
-
-        function truncate(str, maxLength) {
-            if (!str) return '';
-            return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
         }
 
         // Load publications on page load

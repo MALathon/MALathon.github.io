@@ -198,10 +198,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
-        .card-link {
-            display: block;
-            text-decoration: none;
-            color: inherit;
+        .card-content {
             padding: 25px;
         }
 
@@ -231,20 +228,6 @@
             background: rgba(74, 226, 192, 0.15);
         }
 
-        .card-arrow {
-            width: 20px;
-            height: 20px;
-            opacity: 0;
-            transform: translateX(-10px);
-            transition: all 0.3s ease;
-            color: #94a3b8;
-        }
-
-        .card:hover .card-arrow {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
         .card-title {
             font-size: 1.25rem;
             font-weight: 600;
@@ -264,6 +247,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
+            margin-bottom: 20px;
         }
 
         .tag {
@@ -276,6 +260,98 @@
             color: #94a3b8;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+        }
+
+        /* Card Actions */
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary.webapp-btn {
+            background: linear-gradient(135deg, #4AE2C0 0%, #2196F3 100%);
+        }
+
+        .btn-primary.webapp-btn:hover {
+            box-shadow: 0 4px 12px rgba(74, 226, 192, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #94a3b8;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #fff;
+        }
+
+        .btn-icon {
+            padding: 10px;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(74, 226, 192, 0.95);
+            color: #001833;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast svg {
+            width: 18px;
+            height: 18px;
         }
 
         /* Animations */
@@ -339,6 +415,14 @@
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
+
+            .card-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
         }
 
         /* Glow effect */
@@ -355,7 +439,7 @@
         }
 
         /* Focus styles for accessibility */
-        .card-link:focus-visible,
+        .btn:focus-visible,
         .footer-link:focus-visible {
             outline: 3px solid #667eea;
             outline-offset: 3px;
@@ -369,6 +453,9 @@
             .card:hover {
                 transform: none;
             }
+            .toast {
+                transition: none;
+            }
         }
     </style>
 </head>
@@ -376,6 +463,14 @@
     <div class="bg-animation"></div>
     <div class="grid-overlay"></div>
     <div class="glow" id="glow"></div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span id="toast-message">Link copied!</span>
+    </div>
 
     <div class="container">
         <header class="header">
@@ -398,13 +493,11 @@
             </div>
 
             <div class="cards-grid">
+                <!-- NCI 2025 Presentation -->
                 <div class="card presentation">
-                    <a href="/presentations/NCI2025-AI-Oversight_Framework/dist/" class="card-link">
+                    <div class="card-content">
                         <div class="card-header">
                             <span class="card-badge">NCI 2025</span>
-                            <svg class="card-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                            </svg>
                         </div>
                         <h3 class="card-title">AI Research Oversight: Building an Effective Framework</h3>
                         <p class="card-description">
@@ -416,16 +509,34 @@
                             <span class="tag">Healthcare</span>
                             <span class="tag">Interactive</span>
                         </div>
-                    </a>
+                        <div class="card-actions">
+                            <a href="/presentations/NCI2025-AI-Oversight_Framework/dist/" class="btn btn-primary">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                View Live
+                            </a>
+                            <a href="/presentations/NCI2025-AI-Oversight_Framework/AI Research Oversight_ Building an Effective Framework.pdf" class="btn btn-secondary" download>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                </svg>
+                                PDF
+                            </a>
+                            <button class="btn btn-secondary btn-icon" onclick="copyLink('/presentations/NCI2025-AI-Oversight_Framework/dist/')" title="Copy link">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Core Training Workshop -->
                 <div class="card presentation">
-                    <a href="/presentations/CoreTrainingWorkshop/dist/" class="card-link">
+                    <div class="card-content">
                         <div class="card-header">
                             <span class="card-badge">Core Training 2025</span>
-                            <svg class="card-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                            </svg>
                         </div>
                         <h3 class="card-title">Core Training Workshop: AI Research Essentials</h3>
                         <p class="card-description">
@@ -437,7 +548,27 @@
                             <span class="tag">IRB</span>
                             <span class="tag">Interactive</span>
                         </div>
-                    </a>
+                        <div class="card-actions">
+                            <a href="/presentations/CoreTrainingWorkshop/dist/" class="btn btn-primary">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                View Live
+                            </a>
+                            <a href="/presentations/CoreTrainingWorkshop/Core-Training-Workshop-AI.pdf" class="btn btn-secondary" download>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                </svg>
+                                PDF
+                            </a>
+                            <button class="btn btn-secondary btn-icon" onclick="copyLink('/presentations/CoreTrainingWorkshop/dist/')" title="Copy link">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -457,13 +588,11 @@
             </div>
 
             <div class="cards-grid">
+                <!-- AI Oversight Tools Suite -->
                 <div class="card webapp">
-                    <a href="/ai-oversight-tools/" class="card-link">
+                    <div class="card-content">
                         <div class="card-header">
                             <span class="card-badge">SvelteKit 5</span>
-                            <svg class="card-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                            </svg>
                         </div>
                         <h3 class="card-title">AI Oversight Tools Suite</h3>
                         <p class="card-description">
@@ -475,28 +604,22 @@
                             <span class="tag">Graph Editor</span>
                             <span class="tag">600+ Controls</span>
                         </div>
-                    </a>
+                        <div class="card-actions">
+                            <a href="/ai-oversight-tools/" class="btn btn-primary webapp-btn">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                                Open App
+                            </a>
+                            <button class="btn btn-secondary btn-icon" onclick="copyLink('/ai-oversight-tools/')" title="Copy link">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card webapp">
-                    <a href="/presentations/irb-rules-engine/dist/" class="card-link">
-                        <div class="card-header">
-                            <span class="card-badge">React + Cytoscape</span>
-                            <svg class="card-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                            </svg>
-                        </div>
-                        <h3 class="card-title">IRB Rules Engine</h3>
-                        <p class="card-description">
-                            Visual rule builder for protocol assessment with graph visualization and risk-based controls.
-                        </p>
-                        <div class="card-tags">
-                            <span class="tag">Rule Builder</span>
-                            <span class="tag">Graph Viz</span>
-                            <span class="tag">IndexedDB</span>
-                        </div>
-                    </a>
-                </div>
             </div>
         </section>
 
@@ -546,6 +669,34 @@
         document.addEventListener('mouseover', () => {
             glow.style.opacity = '1';
         });
+
+        // Copy link function
+        function copyLink(path) {
+            const fullUrl = window.location.origin + path;
+            navigator.clipboard.writeText(fullUrl).then(() => {
+                showToast('Link copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = fullUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('Link copied to clipboard!');
+            });
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
     </script>
 </body>
 </html>

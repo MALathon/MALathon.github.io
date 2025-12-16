@@ -1009,7 +1009,7 @@
                     if (b.year !== a.year) return b.year - a.year;
                     return (b.citationCount || 0) - (a.citationCount || 0);
                 })
-                .slice(0, 6); // Show top 6 recent papers in sidebar
+                .slice(0, 12); // Show top 12 recent papers in sidebar
 
             // Render papers
             const listContainer = document.getElementById('pub-list');
